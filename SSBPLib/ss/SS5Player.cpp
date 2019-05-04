@@ -83,26 +83,26 @@ SS5Player::~SS5Player()
 }
 
 
-void SS5Player::play(const string& animeName, int startFrameNo)
+void SS5Player::play(const string& animeName, float startFrame)
 {
 	const AnimeRef* animeRef = m_resource->m_animeCache->getReference(animeName);
 	SS_ASSERT_LOG(animeRef, "Not found animation > anime=%s", animeName.c_str());
 	
-	play(animeRef, startFrameNo);
+	play(animeRef, startFrame);
 }
 
-void SS5Player::play(const AnimeRef* animeRef, int startFrameNo)
+void SS5Player::play(const AnimeRef* animeRef, float startFrame)
 {
 	m_animationData = animeRef;
 		
 	allocParts(animeRef->m_numParts);	//割り当て
 	setPartsParentage();				//親子関係構築
 	
-	setCurrentFrame(startFrameNo);
-	setFrame(getCurrentFrame());
+	setCurrentFrame(startFrame);
+	setFrame(getCurrentFrameInt());
 
 	//play実行時に最初のフレームのユーザーデータを確認する
-	checkUserData(getCurrentFrame());
+	checkUserData(getCurrentFrameInt());
 }
 
 
@@ -178,11 +178,14 @@ int SS5Player::getMaxFrame() const{
 	return m_animationData->m_animationData->numFrames;
 }
 
-int SS5Player::getCurrentFrame() const{
+float SS5Player::getCurrentFrame() const {
+	return m_currentFrameTime;
+}
+int SS5Player::getCurrentFrameInt() const{
 	return static_cast<int>(m_currentFrameTime);
 }
 
-void SS5Player::setCurrentFrame(int frame){
+void SS5Player::setCurrentFrame(float frame){
 	m_currentFrameTime = frame;
 }
 
@@ -193,8 +196,8 @@ void SS5Player::update(float dt)
 	float nextFrameTime = m_currentFrameTime + (dt * getAnimeFPS());
 	float nextFrameRemainder = nextFrameTime - static_cast<int>(nextFrameTime);
 		
-	int checkFrame = getCurrentFrame();
-	int seekCount = nextFrameTime - getCurrentFrame();
+	int checkFrame = getCurrentFrameInt();			// ここから整数単位でフレームを進め、イベントをチェックする
+	int seekCount = nextFrameTime - checkFrame;		// 進めるフレーム数
 	// 順再生時.
 	for(int i = 0; i < seekCount; ++i){
 		checkFrame = m_eventListener->LimitFrame(checkFrame + 1, getMaxFrame());	//範囲制限
@@ -222,7 +225,7 @@ void SS5Player::update(float dt)
 		
 	m_currentFrameTime = checkFrame + nextFrameRemainder;
 
-	setFrame(getCurrentFrame());
+	setFrame(getCurrentFrameInt());
 }
 
 

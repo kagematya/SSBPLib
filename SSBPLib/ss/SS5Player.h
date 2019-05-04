@@ -30,10 +30,10 @@ public:
 	 * アニメーション名から再生するデータを選択します.
 	 * "ssae名/モーション名"で指定してください.
 	 * sample.ssaeのanime_1を指定する場合、sample/anime_1となります.
-	 * @param  animeName     再生するアニメーション名
-	 * @param  startFrameNo  再生を開始するフレームNoの指定. 省略時は0
+	 * @param  animeName	再生するアニメーション名
+	 * @param  startFrame	再生を開始するフレームの指定. 省略時は0
 	 */
-	void play(const std::string& animeName, int startFrameNo = 0);
+	void play(const std::string& animeName, float startFrame = 0);
 
 
 	/* 毎フレーム呼ぶもの */
@@ -46,8 +46,9 @@ public:
 
 	/* 再生フレーム */
 	int getMaxFrame() const;			//アニメーションの総フレームを取得
-	int getCurrentFrame() const;		//再生フレームを取得
-	void setCurrentFrame(int frame);	//再生フレームの設定。update呼ぶまで反映されません
+	float getCurrentFrame() const;		//再生フレームを取得
+	int getCurrentFrameInt() const;		//整数化した再生フレームを取得
+	void setCurrentFrame(float frame);	//再生フレームの設定。update呼ぶまで反映されません
 
 	/* パーツへのアクセサ */
 	int getPartsNum() const;										//再生しているアニメーションに含まれるパーツ数を取得
@@ -113,7 +114,7 @@ private:
 	void releaseParts();
 	void setPartsParentage();
 
-	void play(const AnimeRef* animeRef, int startFrameNo);
+	void play(const AnimeRef* animeRef, float startFrame);
 	void setFrame(int frameNo);
 	void checkUserData(int frameNo);
 
