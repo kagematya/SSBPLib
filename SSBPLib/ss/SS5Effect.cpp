@@ -65,13 +65,9 @@ void SS5Effect::drawSprite(
 	const CellRef* refCell,
 	SsRenderBlendType blendType,
 	const Matrix& localMatrix,
-	SSColor4B	color,
+	const SSColor4B& color,
 	TextureID textureId
 ){
-	Matrix matrix = localMatrix * m_playerSetting.getWorldMatrix();
-	color.a *= m_playerSetting.m_color.a;	//todo:他のカラー値の反映もやる
-
-
 	//セルの矩形から基本となる頂点座標を計算
 	float width_h = refCell->m_rect.width() / 2;
 	float height_h = refCell->m_rect.height() / 2;
@@ -106,9 +102,9 @@ void SS5Effect::drawSprite(
 
 	//SSDrawSpriteから出しました-----------------------------------------------
 
-	//vertexにworldMatrixをかける
+	//vertexをアニメーション空間での配置に変換
 	quad.vertexForeach([&](Vector3& vertex){
-		vertex *= matrix;
+		vertex *= localMatrix;
 	});
 
 	
@@ -425,7 +421,7 @@ void SS5Effect::setSeedOffset(int offset)
 }
 
 
-
+#if 0
 //各種設定
 void SS5Effect::setParentMatrix(const Matrix& matrix){
 	m_playerSetting.m_parentMatrix = matrix;
@@ -462,6 +458,6 @@ void SS5Effect::setColor(float r, float g, float b){	 /*[0:1]*/
 	m_playerSetting.m_color.g = clamp(g, 0.0f, 1.0f);
 	m_playerSetting.m_color.b = clamp(b, 0.0f, 1.0f);
 }
-
+#endif
 
 } //namespace ss

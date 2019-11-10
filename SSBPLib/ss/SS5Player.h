@@ -18,6 +18,8 @@ class SS5EventListener;
 
 /**
  * SS5Player
+ * このクラスがサポートする計算はアニメーション空間での結果とします。
+ * ゲームオブジェクトの座標を反映させたいときは描画イベントに渡る頂点に行列をかけて利用してください
  */
 class SS5Player{
 public:
@@ -70,7 +72,7 @@ public:
 	 */
 	void setPartCell(int partIndex, const std::string& cellname);
 
-
+#if 0
 	/** プレイヤー本体に最初に掛ける行列を設定します */
 	void setParentMatrix(const Matrix& matrix);
 	const Matrix& getParentMatrix() const;
@@ -103,7 +105,7 @@ public:
 	 * @param b		青成分[0:1]
 	 */
 	void setColor(float r, float g, float b);
-
+#endif
 
 
 	/** 再生可能なアニメーションのリストを返す */
@@ -137,8 +139,9 @@ private:
 	float m_currentFrameTime;		//現在のフレーム。小数点を考慮するが、フレームに直すには単にintにすれば良い
 	int m_seedOffset;				//エフェクトシードオフセット
 
+#if 0
 	PlayerSetting m_playerSetting;	//プレイヤー単位での操作設定についてを抱えておく(移動、回転など)
-
+#endif
 
 private: //non copyable
 	SS5Player(const SS5Player &o) = delete;

@@ -1,4 +1,5 @@
 ﻿#pragma once
+#if 0
 #include "math/Matrix.h"
 #include "math/Vector3.h"
 #include "SS5PlayerTypes.h"
@@ -46,3 +47,4 @@ private:
 };
 
 } //namespace ss
+#endif

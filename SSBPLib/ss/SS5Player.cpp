@@ -50,7 +50,9 @@ SS5Player::SS5Player(SS5EventListener* eventListener, const ResourceSet* resourc
 	, m_changeCellIndex()
 	, m_currentFrameTime(0.0f)
 	, m_seedOffset(0)
+#if 0
 	, m_playerSetting()
+#endif
 {
 	SS_ASSERT_LOG(m_eventListener, "eventListener is null");
 	SS_ASSERT_LOG(m_resource, "resource is null");
@@ -374,9 +376,8 @@ void SS5Player::setFrame(int frameNo)
 	}
 
 	// 行列更新してワールド変換する
-	Matrix rootMatrix = m_playerSetting.getWorldMatrix();
 	for(CustomSprite& sprite : m_parts){
-		sprite.updateToWorld(rootMatrix, m_playerSetting.m_color);
+		sprite.updateToWorld();
 	}
 
 	// 特殊パーツのアップデート
@@ -456,6 +457,7 @@ int SS5Player::getAnimeFPS() const{
 	return m_animationData->m_animationData->fps;
 }
 
+#if 0
 /** プレイヤーへの各種設定 ------------------------------*/
 void SS5Player::setParentMatrix(const Matrix& matrix){
 	m_playerSetting.m_parentMatrix = matrix;
@@ -509,6 +511,7 @@ void SS5Player::setColor(float r, float g, float b)
 	m_playerSetting.m_color.b = clamp(b, 0.0f, 1.0f);
 }
 /*-------------------------------------------------------*/
+#endif
 
 vector<string> SS5Player::getAnimationList() const{
 	return m_resource->m_animeCache->getAnimationList();

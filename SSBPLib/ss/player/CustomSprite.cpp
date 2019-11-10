@@ -37,12 +37,12 @@ void CustomSprite::constructQuad(const CellRef* cellRef)
 }
 
 
-void CustomSprite::updateToWorld(const Matrix& rootMatrix, const SSColorF& rootColor)
+void CustomSprite::updateToWorld()
 {
-	//行列とアルファの更新。親から結果を伝播させる。親がない場合はrootから。
+	//行列とアルファの更新。親から結果を伝播させる
 	if(m_parent == nullptr){
-		m_worldMatrix = m_state.getLocalMatrix() * rootMatrix;
-		m_alpha = m_state.getAlpha() * rootColor.a;
+		m_worldMatrix = m_state.getLocalMatrix();
+		m_alpha = m_state.getAlpha();
 	}
 	else{
 		m_worldMatrix = m_state.getLocalMatrix() * m_parent->m_worldMatrix;
@@ -57,10 +57,7 @@ void CustomSprite::updateToWorld(const Matrix& rootMatrix, const SSColorF& rootC
 	
 	//頂点カラー補正
 	m_quad.colorsForeach([&](SSColor4B& color){
-		color.r *= rootColor.r;
-		color.g *= rootColor.g;
-		color.b *= rootColor.b;
-		color.a *= m_alpha;		//color.aはrootから伝播済み
+		color.a *= m_alpha;		//alphaは伝搬させる
 	});
 }
 

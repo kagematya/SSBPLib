@@ -80,7 +80,7 @@ public:
 		const CellRef* refCell,
 		SsRenderBlendType blendType,
 		const Matrix& localMatrix,
-		SSColor4B	color,
+		const SSColor4B& color,
 		TextureID textureId
 	);
 
@@ -88,6 +88,7 @@ public:
 	bool isInfinity() const{ return m_infinite; }
 	bool isWarning() const{ return m_isWarningData; }
 
+#if 0
 public:
 	//各種設定
 	void setParentMatrix(const Matrix& matrix);
@@ -103,6 +104,7 @@ public:
 	void setColor(float r, float g, float b);		/*[0:1]*/
 private:
 	PlayerSetting m_playerSetting;
+#endif
 
 public:
 	//todo:これは後で削除する
@@ -117,9 +119,11 @@ public:
 			play();
 		}
 
+#if 0
 		setAlpha(parentAlpha);
 		setParentMatrix(parentWorldMatrix);
-		
+#endif
+	
 		if(isValid){
 			if(effectAttribute.m_independent){
 				//独立動作
