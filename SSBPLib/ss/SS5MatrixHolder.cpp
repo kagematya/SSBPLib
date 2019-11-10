@@ -15,7 +15,7 @@ SS5MatrixHolder::SS5MatrixHolder()
 }
 
 // SRT行列を取得
-const Matrix& SS5MatrixHolder::getMatrix()
+const Matrix& SS5MatrixHolder::getMatrix() const
 {
 	if (m_dirtyFlag) {
 		m_matrix = makeMatrix();

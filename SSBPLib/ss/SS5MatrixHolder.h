@@ -10,7 +10,7 @@ public:
 	SS5MatrixHolder();
 
 	// SRT行列を取得
-	const Matrix& getMatrix();
+	const Matrix& getMatrix() const;
 	
 	// 位置
 	void setPosition(float x, float y, float z = 0.0f);
@@ -33,8 +33,8 @@ public:
 	bool getFlipTB() const;
 
 private:
-	Matrix  m_matrix;		// SRT行列
-	bool    m_dirtyFlag;	// 変更があったか？
+	mutable Matrix  m_matrix;		// SRT行列
+	mutable bool    m_dirtyFlag;	// 変更があったか？
 
 	Vector3 m_position;		// 位置
 	Vector3 m_rotation;		// 回転(deg)
