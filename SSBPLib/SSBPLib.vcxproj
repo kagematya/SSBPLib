@@ -223,6 +223,7 @@
     <ClCompile Include="ss\player\UserData.cpp" />
     <ClCompile Include="ss\player\Util.cpp" />
     <ClCompile Include="ss\SS5Effect.cpp" />
+    <ClCompile Include="ss\SS5MatrixHolder.cpp" />
     <ClCompile Include="ss\SS5Player.cpp" />
     <ClCompile Include="ss\SS5PlayerTypes.cpp" />
     <ClCompile Include="ss\SS5ResourceManager.cpp" />
@@ -262,6 +263,7 @@
     <ClInclude Include="ss\ResultState.h" />
     <ClInclude Include="ss\SS5Effect.h" />
     <ClInclude Include="ss\SS5EventListener.h" />
+    <ClInclude Include="ss\SS5MatrixHolder.h" />
     <ClInclude Include="ss\SS5Player.h" />
     <ClInclude Include="ss\SS5PlayerData.h" />
     <ClInclude Include="ss\SS5PlayerTypes.h" />

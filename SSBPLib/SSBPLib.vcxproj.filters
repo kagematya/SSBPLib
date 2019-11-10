@@ -77,6 +77,9 @@
     <ClCompile Include="ss\SS5ResourceManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="ss\SS5MatrixHolder.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ss\SS5Player.h">
@@ -173,6 +176,9 @@
       <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="ss\ResultState.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="ss\SS5MatrixHolder.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>
