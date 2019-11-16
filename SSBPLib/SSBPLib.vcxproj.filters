@@ -166,9 +166,6 @@
     <ClInclude Include="ss\SS5Effect.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="ss\player\PlayerSetting.h">
-      <Filter>ソース ファイル\player</Filter>
-    </ClInclude>
     <ClInclude Include="ss\player\EffectPartStatus.h">
       <Filter>ソース ファイル\player</Filter>
     </ClInclude>

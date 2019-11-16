@@ -3,7 +3,6 @@
 #include "SS5PlayerTypes.h"
 #include "effect/sstypes.h"
 #include "math/Matrix.h"
-#include "player/PlayerSetting.h"
 #include "player/EffectPartStatus.h"
 
 namespace ss{

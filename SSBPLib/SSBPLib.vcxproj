@@ -104,7 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(ProjectDir)ss\;</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
     </ClCompile>
@@ -254,7 +254,6 @@
     <ClInclude Include="ss\player\EffectPartStatus.h" />
     <ClInclude Include="ss\player\InstancePartStatus.h" />
     <ClInclude Include="ss\player\PlayerDef.h" />
-    <ClInclude Include="ss\player\PlayerSetting.h" />
     <ClInclude Include="ss\player\ResourceSet.h" />
     <ClInclude Include="ss\player\State.h" />
     <ClInclude Include="ss\player\ToPointer.h" />

@@ -7,7 +7,6 @@
 #include <list>
 #include "player/CustomSprite.h"
 #include "player/State.h"
-#include "player/PlayerSetting.h"
 
 namespace ss{
 struct AnimeRef;
