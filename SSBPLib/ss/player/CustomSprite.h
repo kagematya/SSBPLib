@@ -19,11 +19,10 @@ public:
 
 	/**
 	 * 行列とカラーの更新を行い、quadをワールド変換する。
-	 * アルファは親から伝播していくが、カラーは単に乗算される。
 	 * 親の情報は更新済みにしておく必要がある。
 	 * 親がいない場合はrootの情報を使います。
 	 */
-	void updateToWorld();
+	void updateToWorld(const Matrix& rootMatrix, float rootAlpha);
 
 	bool isVisibled() const;		//drawが必要か?
 

@@ -50,9 +50,8 @@ SS5Player::SS5Player(SS5EventListener* eventListener, const ResourceSet* resourc
 	, m_changeCellIndex()
 	, m_currentFrameTime(0.0f)
 	, m_seedOffset(0)
-#if 0
-	, m_playerSetting()
-#endif
+	, m_rootMatrix()
+	, m_alpha(1.0f)
 {
 	SS_ASSERT_LOG(m_eventListener, "eventListener is null");
 	SS_ASSERT_LOG(m_resource, "resource is null");
@@ -377,7 +376,7 @@ void SS5Player::setFrame(int frameNo)
 
 	// 行列更新してワールド変換する
 	for(CustomSprite& sprite : m_parts){
-		sprite.updateToWorld();
+		sprite.updateToWorld(m_rootMatrix, m_alpha);
 	}
 
 	// 特殊パーツのアップデート
@@ -457,61 +456,23 @@ int SS5Player::getAnimeFPS() const{
 	return m_animationData->m_animationData->fps;
 }
 
-#if 0
-/** プレイヤーへの各種設定 ------------------------------*/
-void SS5Player::setParentMatrix(const Matrix& matrix){
-	m_playerSetting.m_parentMatrix = matrix;
+
+// RootMatrix
+void SS5Player::setRootMatrix(const Matrix& matrix) {
+	m_rootMatrix = matrix;
 }
-const Matrix& SS5Player::getParentMatrix() const{
-	return m_playerSetting.m_parentMatrix;
-}
-void SS5Player::setPosition(float x, float y, float z){
-	m_playerSetting.m_position = Vector3(x, y, z);
-}
-const Vector3& SS5Player::getPosition() const{
-	return m_playerSetting.m_position;
-}
-void SS5Player::setRotation(float x, float y, float z){
-	m_playerSetting.m_rotation = Vector3(x, y, z);
-}
-const Vector3& SS5Player::getRotation() const{
-	return m_playerSetting.m_rotation;
-}
-void SS5Player::setScale(float x, float y, float z){
-	m_playerSetting.m_scale = Vector3(x, y, z);
-}
-const Vector3& SS5Player::getScale() const{
-	return m_playerSetting.m_scale;
-}
-void SS5Player::setFlipLR(bool flip){
-	m_playerSetting.m_flipLR = flip;
-}
-void SS5Player::setFlipTB(bool flip){
-	m_playerSetting.m_flipTB = flip;
-}
-bool SS5Player::getFlipLR() const{
-	return m_playerSetting.m_flipLR;
-}
-bool SS5Player::getFlipTB() const{
-	return m_playerSetting.m_flipTB;
+const Matrix& SS5Player::getRootMatrix() const {
+	return m_rootMatrix;
 }
 
-void SS5Player::setAlpha(float a){
-	m_playerSetting.m_color.a = clamp(a, 0.0f, 1.0f);
+// alpha
+void SS5Player::setAlpha(float a) {
+	m_alpha = clamp(a, 0.0f, 1.0f);
 }
-float SS5Player::getAlpha() const{
-	return m_playerSetting.m_color.a;
+float SS5Player::getAlpha() const {
+	return m_alpha;
 }
 
-//アニメーションの色成分を変更します
-void SS5Player::setColor(float r, float g, float b)
-{
-	m_playerSetting.m_color.r = clamp(r, 0.0f, 1.0f);
-	m_playerSetting.m_color.g = clamp(g, 0.0f, 1.0f);
-	m_playerSetting.m_color.b = clamp(b, 0.0f, 1.0f);
-}
-/*-------------------------------------------------------*/
-#endif
 
 vector<string> SS5Player::getAnimationList() const{
 	return m_resource->m_animeCache->getAnimationList();

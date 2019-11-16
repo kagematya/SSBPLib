@@ -88,23 +88,17 @@ public:
 	bool isInfinity() const{ return m_infinite; }
 	bool isWarning() const{ return m_isWarningData; }
 
-#if 0
-public:
-	//各種設定
-	void setParentMatrix(const Matrix& matrix);
-	const Matrix& getParentMatrix() const;
-	void setPosition(float x, float y, float z = 0.0);
-	const Vector3& getPosition() const;				//parentMatrix無視
-	void setRotation(float x, float y, float z);
-	const Vector3& getRotation() const;				//parentMatrix無視
-	void setScale(float x, float y, float z = 1.0);
-	const Vector3& getScale() const;				//parentMatrix無視
+	//
+	void setRootMatrix(const Matrix& matrix);
+	const Matrix& getRootMatrix() const;
+
 	void setAlpha(float a);							/*[0:1]*/
 	float getAlpha() const;							/*[0:1]*/
-	void setColor(float r, float g, float b);		/*[0:1]*/
+
 private:
-	PlayerSetting m_playerSetting;
-#endif
+	Matrix m_rootMatrix;
+	float m_alpha;
+
 
 public:
 	//todo:これは後で削除する
@@ -119,10 +113,8 @@ public:
 			play();
 		}
 
-#if 0
 		setAlpha(parentAlpha);
-		setParentMatrix(parentWorldMatrix);
-#endif
+		setRootMatrix(parentWorldMatrix);
 	
 		if(isValid){
 			if(effectAttribute.m_independent){

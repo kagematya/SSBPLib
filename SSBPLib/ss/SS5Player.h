@@ -18,8 +18,6 @@ class SS5EventListener;
 
 /**
  * SS5Player
- * このクラスがサポートする計算はアニメーション空間での結果とします。
- * ゲームオブジェクトの座標を反映させたいときは描画イベントに渡る頂点に行列をかけて利用してください
  */
 class SS5Player{
 public:
@@ -72,40 +70,14 @@ public:
 	 */
 	void setPartCell(int partIndex, const std::string& cellname);
 
-#if 0
+
 	/** プレイヤー本体に最初に掛ける行列を設定します */
-	void setParentMatrix(const Matrix& matrix);
-	const Matrix& getParentMatrix() const;
-
-	/** プレイヤー本体の位置を設定します */
-	void setPosition(float x, float y, float z=0.0);
-	const Vector3& getPosition() const;				//parentMatrix無視
-
-	/** プレイヤー本体の回転角度を設定します。2Dの回転はZに値を設定してください。 */
-	void setRotation(float x, float y, float z);
-	const Vector3& getRotation() const;				//parentMatrix無視
-	/** プレイヤー本体のスケールを設定します。*/
-	void setScale(float x, float y, float z=1.0);
-	const Vector3& getScale() const;				//parentMatrix無視
-	/** フリップ */
-	void setFlipLR(bool flip);	//左右反転
-	void setFlipTB(bool flip);	//上下反転
-	bool getFlipLR() const;
-	bool getFlipTB() const;
-
+	void setRootMatrix(const Matrix& matrix);
+	const Matrix& getRootMatrix() const;
 
 	/** プレイヤー本体の透明度を設定します[0:1]*/
 	void setAlpha(float a);
 	float getAlpha() const;
-
-	/**
-	 * アニメの色設定
-	 * @param r		赤成分[0:1]
-	 * @param g		緑成分[0:1]
-	 * @param b		青成分[0:1]
-	 */
-	void setColor(float r, float g, float b);
-#endif
 
 
 	/** 再生可能なアニメーションのリストを返す */
@@ -139,9 +111,9 @@ private:
 	float m_currentFrameTime;		//現在のフレーム。小数点を考慮するが、フレームに直すには単にintにすれば良い
 	int m_seedOffset;				//エフェクトシードオフセット
 
-#if 0
-	PlayerSetting m_playerSetting;	//プレイヤー単位での操作設定についてを抱えておく(移動、回転など)
-#endif
+	Matrix m_rootMatrix;			// 最初にかかる行列
+	float m_alpha;					// alpha[0:1]
+
 
 private: //non copyable
 	SS5Player(const SS5Player &o) = delete;

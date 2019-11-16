@@ -21,6 +21,8 @@ SS5Effect::SS5Effect(SS5EventListener* eventListener, const ResourceSet* resourc
 	, m_isLoop(false)
 	, m_seedOffset(0)
 	, m_isWarningData(false)
+	, m_rootMatrix()
+	, m_alpha(1.0f)
 {
 	SS_ASSERT(m_eventListener);
 	SS_ASSERT(m_resource);
@@ -95,16 +97,18 @@ void SS5Effect::drawSprite(
 	quad.br.texCoords = SSTex2F(refCell->m_uv2.u(), refCell->m_uv2.v());
 
 	//カラー値を設定
-	quad.tl.colors = color;
-	quad.tr.colors = color;
-	quad.bl.colors = color;
-	quad.br.colors = color;
+	SSColor4B col(color.r, color.g, color.b, color.a * m_alpha);
+	quad.tl.colors = col;
+	quad.tr.colors = col;
+	quad.bl.colors = col;
+	quad.br.colors = col;
 
 	//SSDrawSpriteから出しました-----------------------------------------------
 
-	//vertexをアニメーション空間での配置に変換
+	//vertexにworldMatrixをかける
+	Matrix matrix = localMatrix * m_rootMatrix;
 	quad.vertexForeach([&](Vector3& vertex){
-		vertex *= localMatrix;
+		vertex *= matrix;
 	});
 
 	
@@ -421,43 +425,20 @@ void SS5Effect::setSeedOffset(int offset)
 }
 
 
-#if 0
-//各種設定
-void SS5Effect::setParentMatrix(const Matrix& matrix){
-	m_playerSetting.m_parentMatrix = matrix;
+//
+void SS5Effect::setRootMatrix(const Matrix& matrix) {
+	m_rootMatrix = matrix;
 }
-const Matrix& SS5Effect::getParentMatrix() const{
-	return m_playerSetting.m_parentMatrix;
+const Matrix& SS5Effect::getRootMatrix() const {
+	return m_rootMatrix;
 }
-void SS5Effect::setPosition(float x, float y, float z){
-	m_playerSetting.m_position = Vector3(x, y, z);
+
+void SS5Effect::setAlpha(float a) {						 /*[0:1]*/
+	m_alpha = clamp(a, 0.0f, 1.0f);
 }
-const Vector3& SS5Effect::getPosition() const{
-	return m_playerSetting.m_position;
+float SS5Effect::getAlpha() const {						 /*[0:1]*/
+	return m_alpha;
 }
-void SS5Effect::setRotation(float x, float y, float z){
-	m_playerSetting.m_rotation = Vector3(x, y, z);
-}
-const Vector3& SS5Effect::getRotation() const{
-	return m_playerSetting.m_rotation;
-}
-void SS5Effect::setScale(float x, float y, float z){
-	m_playerSetting.m_scale = Vector3(x, y, z);
-}
-const Vector3& SS5Effect::getScale() const{
-	return m_playerSetting.m_scale;
-}
-void SS5Effect::setAlpha(float a){						 /*[0:1]*/
-	m_playerSetting.m_color.a = clamp(a, 0.0f, 1.0f);
-}
-float SS5Effect::getAlpha() const{						 /*[0:1]*/
-	return m_playerSetting.m_color.a;
-}
-void SS5Effect::setColor(float r, float g, float b){	 /*[0:1]*/
-	m_playerSetting.m_color.r = clamp(r, 0.0f, 1.0f);
-	m_playerSetting.m_color.g = clamp(g, 0.0f, 1.0f);
-	m_playerSetting.m_color.b = clamp(b, 0.0f, 1.0f);
-}
-#endif
+
 
 } //namespace ss
