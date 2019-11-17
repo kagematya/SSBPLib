@@ -8,7 +8,9 @@
 
 namespace ss{
 	class SS5Player;
+	class SS5MatrixHolder;
 }
+class EventListener;
 
 
 class MenuInterface{
@@ -31,26 +33,27 @@ private:
 	T* m_context;
 };
 
-using Base = MenuBase<ss::SS5Player>;
+using SS5Base = MenuBase<ss::SS5Player>;
+using TransformBase = MenuBase<ss::SS5MatrixHolder>;
 
 
 //メニューのセレクタ
-class MenuRoot : public Base{
+class MenuRoot : public MenuInterface {
 public:
-	MenuRoot(ss::SS5Player* p);
+	MenuRoot(ss::SS5Player* p, ss::SS5MatrixHolder* transform);
 	~MenuRoot();
 
 	void action(int up, int down, int left, int right, int enter, int cancel) override;
 	void draw(std::ostream &oss) override;
 
 private:
-	std::vector<Base*> m_childMenu;
+	std::vector<MenuInterface*> m_childMenu;
 	int m_activeIndex;
 };
 
 
 //--
-struct AnimeChanger : public Base{
+struct AnimeChanger : public SS5Base {
 	AnimeChanger(ss::SS5Player* p);
 	void action(int up, int down, int left, int right, int enter, int cancel) override;
 	void draw(std::ostream &oss) override;
@@ -60,17 +63,17 @@ struct AnimeChanger : public Base{
 	int m_select;
 };
 
-struct FrameChanger : public Base{
-	FrameChanger(ss::SS5Player* p) : Base(p), m_frame(0){}
+struct FrameChanger : public SS5Base {
+	FrameChanger(ss::SS5Player* p) : SS5Base(p), m_frame(0){}
 	void action(int up, int down, int left, int right, int enter, int cancel) override;
 	void draw(std::ostream &oss) override;
 
 	int m_frame;
 };
 
-struct PositionChanger : public Base{
+struct PositionChanger : public TransformBase {
 	enum class XYZ{ X, Y/*, Z*/ };
-	PositionChanger(ss::SS5Player* p, XYZ xyz, int pos) : Base(p), m_xyz(xyz), m_position(pos), INIT_POS(pos){}
+	PositionChanger(ss::SS5MatrixHolder* transform, XYZ xyz, int pos) : TransformBase(transform), m_xyz(xyz), m_position(pos), INIT_POS(pos){}
 	void action(int up, int down, int left, int right, int enter, int cancel) override;
 	void draw(std::ostream &oss) override;
 
@@ -79,9 +82,9 @@ struct PositionChanger : public Base{
 	const int INIT_POS;
 };
 
-struct RotationChanger : public Base{
+struct RotationChanger : public TransformBase {
 	enum class XYZ{ X, Y, Z };
-	RotationChanger(ss::SS5Player* p, XYZ xyz) : Base(p), m_xyz(xyz), m_rotation(0){}
+	RotationChanger(ss::SS5MatrixHolder* transform, XYZ xyz) : TransformBase(transform), m_xyz(xyz), m_rotation(0){}
 	void action(int up, int down, int left, int right, int enter, int cancel) override;
 	void draw(std::ostream &oss) override;
 
@@ -89,9 +92,9 @@ struct RotationChanger : public Base{
 	int m_rotation;
 };
 
-struct ScaleChanger : public Base{
+struct ScaleChanger : public TransformBase {
 	enum class XYZ{ X, Y/*, Z*/ };
-	ScaleChanger(ss::SS5Player* p, XYZ xyz) : Base(p), m_xyz(xyz), m_scale(0.5){}
+	ScaleChanger(ss::SS5MatrixHolder* transform, XYZ xyz) : TransformBase(transform), m_xyz(xyz), m_scale(0.5){}
 	void action(int up, int down, int left, int right, int enter, int cancel) override;
 	void draw(std::ostream &oss) override;
 
@@ -99,8 +102,8 @@ struct ScaleChanger : public Base{
 	double m_scale;
 };
 
-struct AlphaChanger : public Base{
-	AlphaChanger(ss::SS5Player* p) : Base(p), m_alpha(1.0){}
+struct AlphaChanger : public SS5Base {
+	AlphaChanger(ss::SS5Player* p) : SS5Base(p), m_alpha(1.0){}
 	void action(int up, int down, int left, int right, int enter, int cancel) override;
 	void draw(std::ostream &oss) override;
 

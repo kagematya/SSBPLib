@@ -1,24 +1,26 @@
 ﻿#include "Menu.h"
+#include "EventListener.h"
 #include <sstream>
 #include <algorithm>
 #include "ss/SS5Player.h"
+#include "ss/SS5MatrixHolder.h"
 #include "ss/math/Vector3.h"
 using namespace std;
 using namespace ss;
 
 
-MenuRoot::MenuRoot(ss::SS5Player* p) : Base(p)
-	, m_activeIndex(0)
+MenuRoot::MenuRoot(SS5Player* p, SS5MatrixHolder* transform)
+	: m_activeIndex(0)
 {
 	m_childMenu.push_back(new AnimeChanger(p));
 	m_childMenu.push_back(new FrameChanger(p));
-	m_childMenu.push_back(new PositionChanger(p, PositionChanger::XYZ::X, 400));
-	m_childMenu.push_back(new PositionChanger(p, PositionChanger::XYZ::Y, 150));
-	m_childMenu.push_back(new RotationChanger(p, RotationChanger::XYZ::X));
-	m_childMenu.push_back(new RotationChanger(p, RotationChanger::XYZ::Y));
-	m_childMenu.push_back(new RotationChanger(p, RotationChanger::XYZ::Z));
-	m_childMenu.push_back(new ScaleChanger(p, ScaleChanger::XYZ::X));
-	m_childMenu.push_back(new ScaleChanger(p, ScaleChanger::XYZ::Y));
+	m_childMenu.push_back(new PositionChanger(transform, PositionChanger::XYZ::X, 400));
+	m_childMenu.push_back(new PositionChanger(transform, PositionChanger::XYZ::Y, 150));
+	m_childMenu.push_back(new RotationChanger(transform, RotationChanger::XYZ::X));
+	m_childMenu.push_back(new RotationChanger(transform, RotationChanger::XYZ::Y));
+	m_childMenu.push_back(new RotationChanger(transform, RotationChanger::XYZ::Z));
+	m_childMenu.push_back(new ScaleChanger(transform, ScaleChanger::XYZ::X));
+	m_childMenu.push_back(new ScaleChanger(transform, ScaleChanger::XYZ::Y));
 	m_childMenu.push_back(new AlphaChanger(p));
 }
 
@@ -41,7 +43,7 @@ void MenuRoot::action(int up, int down, int left, int right, int enter, int canc
 	}
 	m_activeIndex = wrap<int>(m_activeIndex, 0, m_childMenu.size());
 	
-	MenuBase *current = m_childMenu[m_activeIndex];
+	MenuInterface *current = m_childMenu[m_activeIndex];
 	current->action(up, down, left, right, enter, cancel);
 }
 
@@ -61,7 +63,7 @@ void MenuRoot::draw(std::ostream &oss)
 
 
 //--
-AnimeChanger::AnimeChanger(SS5Player* p) : Base(p), m_currentAnimeName(""), m_select(0){
+AnimeChanger::AnimeChanger(SS5Player* p) : SS5Base(p), m_currentAnimeName(""), m_select(0) {
 	m_animationList = p->getAnimationList();
 }
 
@@ -101,55 +103,55 @@ void FrameChanger::draw(std::ostream &oss){
 }
 //--
 void PositionChanger::action(int up, int down, int left, int right, int enter, int cancel){
-	SS5Player* ssp = get();
+	SS5MatrixHolder* transform = get();
 	
 	if(left){  m_position--; }
 	if(right){ m_position++; }
 	if(cancel){m_position = INIT_POS;}
 
 	if(enter){
-		Vector3 pos = ssp->getPosition();
+		Vector3 pos = transform->getPosition();
 
 		switch(m_xyz){
 		case XYZ::X:	pos.x = m_position;	break;
 		case XYZ::Y:	pos.y = m_position;	break;
 		}
-		ssp->setPosition(pos.x, pos.y);
+		transform->setPosition(pos.x, pos.y);
 	}
 }
 void PositionChanger::draw(std::ostream &oss){
-	SS5Player* ssp = get();
+	SS5MatrixHolder* transform = get();
 	switch(m_xyz){
 	case XYZ::X:
-		oss << "position X: current=" << ssp->getPosition().x << " --> " << m_position << endl;
+		oss << "position X: current=" << transform->getPosition().x << " --> " << m_position << endl;
 		break;
 	case XYZ::Y:
-		oss << "position Y: current=" << ssp->getPosition().y << " --> " << m_position << endl;
+		oss << "position Y: current=" << transform->getPosition().y << " --> " << m_position << endl;
 		break;
 	}
 }
 //--
 void RotationChanger::action(int up, int down, int left, int right, int enter, int cancel){
-	SS5Player* ssp = get();
+	SS5MatrixHolder* transform = get();
 	
 	if(left){  m_rotation--; }
 	if(right){ m_rotation++; }
 	if(cancel){m_rotation = 0;}
 
 	if(enter){
-		Vector3 rot = ssp->getRotation();
+		Vector3 rot = transform->getRotation();
 
 		switch(m_xyz){
 		case XYZ::X:	rot.x = m_rotation; break;
 		case XYZ::Y:	rot.y = m_rotation; break;
 		case XYZ::Z:	rot.z = m_rotation; break;
 		}
-		ssp->setRotation(rot.x, rot.y, rot.z);
+		transform->setRotation(rot.x, rot.y, rot.z);
 	}
 }
 void RotationChanger::draw(std::ostream &oss){
-	SS5Player* ssp = get();
-	Vector3 rot = ssp->getRotation();
+	SS5MatrixHolder* transform = get();
+	Vector3 rot = transform->getRotation();
 	
 	std::string text;
 	float current;
@@ -162,25 +164,25 @@ void RotationChanger::draw(std::ostream &oss){
 }
 //--
 void ScaleChanger::action(int up, int down, int left, int right, int enter, int cancel){
-	SS5Player* ssp = get();
+	SS5MatrixHolder* transform = get();
 	
 	if(left){  m_scale -= 0.1; }
 	if(right){ m_scale += 0.1; }
 	if(cancel){m_scale = 0.5;}
 
 	if(enter){
-		Vector3 scale = ssp->getScale();
+		Vector3 scale = transform->getScale();
 
 		switch(m_xyz){
 		case XYZ::X:	scale.x = m_scale; break;
 		case XYZ::Y:	scale.y = m_scale; break;
 		}
-		ssp->setScale(scale.x, scale.y);
+		transform->setScale(scale.x, scale.y);
 	}
 }
 void ScaleChanger::draw(std::ostream &oss){
-	SS5Player* ssp = get();
-	Vector3 scale = ssp->getScale();
+	SS5MatrixHolder* transform = get();
+	Vector3 scale = transform->getScale();
 	
 	std::string text;
 	float current;
